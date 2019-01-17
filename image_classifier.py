@@ -1,7 +1,7 @@
 #!/usr/bin/python
 '''
 <image_classifier.py:
-Color-based image classifier. The code uses six different methods to classify the superheroes images.
+Color-based image classifier. This code uses six different methods to classify the superheroes images.
 
 Copyright (C) <2018>  <Eric Bazan> <eric.bazan@mines-paristech.fr>
 This program is free software: you can redistribute it and/or modify
@@ -43,21 +43,18 @@ def bin2bin_hist_comp(hist1, hist2, method):
 
 class ImageClassifier:
 
-    def __init__(self, color_space='LAB', hist_size=8, p_process='True', database_path='', query_path='', metric='emd'):
+    def __init__(self, color_space='LAB', hist_size=8, database_path='', query_path=''):
         """
         :param color_space:
         :param hist_size:
-        :param p_process:
         :param database_path:
         :param query_path:
         :param metric:
         """
         self.color_space = color_space
         self.hist_size = hist_size
-        self.p_process = p_process
         self.database_path = database_path
         self.query_path = query_path
-        self.metric = metric
 
     def get_database_histogram(self, database_path):
         imgs_database = sorted(os.listdir(database_path))
@@ -66,27 +63,26 @@ class ImageClassifier:
         color_pixles = np.array(Parallel(n_jobs=num_cores, require='sharedmem')(delayed(self.img_color_pixels)(imgs_database[ii], self.database_path) for ii in range(len(imgs_database))))
         self.database_hist  = np.array(Parallel(n_jobs=num_cores, require='sharedmem')(delayed(self.histogram_3d)(color_pixles[ii, :, :]) for ii in range(len(imgs_database))))
 
-    def compare_image(self, query_image='ironman'):
+    def compare_image(self, query_image='ironman', metric='emd'):
         self.get_database_histogram(self.database_path)
 
         query_image = query_image + '.png'
         query_color_pixels = self.img_color_pixels(query_image, self.query_path)
         query_hist = self.histogram_3d(query_color_pixels)
 
-        if self.metric == 'corr':
+        if metric == 'corr':
             method = 0
-        elif self.metric == 'inter':
+        elif metric == 'inter':
             method = 2
-        elif self.metric == 'bhatt':
+        elif metric == 'bhatt':
             method = 3
-        elif self.metric == 'chi2':
+        elif metric == 'chi2':
             method = 4
-        elif self.metric == 'kl':
+        elif metric == 'kl':
             method = 5
-        elif self.metric == 'emd':
+        elif metric == 'emd':
             method = 6
-        else:
-            raise ValueError('image_classifier_demo.py: the metric ' + self.metric + ' is not supported.')
+
 
         if method <= 5:
             hist1 = np.float32(query_hist / query_hist.sum())
@@ -96,9 +92,7 @@ class ImageClassifier:
             hist1 = query_hist
             self.distances = np.array(Parallel(n_jobs=num_cores, require='sharedmem')(delayed(ot_hist_comp)(hist1, self.database_hist[ii, :, :, :]) for ii in range(len(self.classes))))
 
-        self.show_result(self.distances, query_image)
-
-
+        self.show_result(self.distances, query_image, metric)
 
     def histogram_3d(self, color_pixels):
         hist, _ = np.histogramdd(color_pixels, bins=self.hist_size)   # range=((0, 255), (0, 255), (0, 255)))
@@ -122,24 +116,30 @@ class ImageClassifier:
 
         return color_pixels
 
-    def show_result(self, distances, query_img):
-        order = distances.argsort()
+    def show_result(self, distances, query_img, metric):
+        if metric == 'corr':
+            order = np.argsort(-distances)
+        elif metric == 'inter':
+            order = np.argsort(-distances)
+        else:
+            order = distances.argsort()
+
         query_img = read_img(self.query_path + query_img)
         best_math = read_img(self.database_path + self.classes[order[0]] + '.png')
 
         fig1, ax = plt.subplots(1, 2, figsize=(8, 4))
-        fig1.suptitle('COMPARISON RESULT \n Metric: ' + self.metric + ', Hist. size: %i' % self.hist_size + ', Color space: ' + self.color_space)
+        fig1.suptitle('COMPARISON RESULT \n Metric: ' + metric + ', Hist. size: %i' % self.hist_size + ', Color space: ' + self.color_space)
         ax[0].imshow(query_img)
         ax[1].imshow(best_math)
         ax[0].set_xlabel('Query image')
-        ax[1].set_xlabel('Best match, d = %.2f' %distances[order[0]])
+        ax[1].set_xlabel('Best match, d = %.2f' % distances[order[0]])
 
         for ii in ax:
             ii.set_xticks([])
             ii.set_yticks([])
 
         fig2, ax = plt.subplots(5, 5, figsize=(8, 10))
-        fig2.suptitle('COMPARISON ARRAY')
+        fig2.suptitle('COMPARISON ARRAY \n Metric: ' + metric + ', Hist. size: %i' % self.hist_size + ', Color space: ' + self.color_space)
 
         order_array = order[1:].reshape((5, 5))
         for ii in range(5):
@@ -148,6 +148,6 @@ class ImageClassifier:
                 ax[ii, jj].imshow(temp_img)
                 ax[ii, jj].set_xticks([])
                 ax[ii, jj].set_yticks([])
-                ax[ii, jj].set_xlabel('d = %.2f' %distances[order_array[ii, jj]])
-        plt.show()
+                ax[ii, jj].set_xlabel('d = %.2f' % distances[order_array[ii, jj]])
+
 
