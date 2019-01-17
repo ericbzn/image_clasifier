@@ -1,13 +1,27 @@
-import os
-from image_classifier import ImageClassifier
-import matplotlib.pyplot as plt
+from image_classifier import *
 
 database_path = 'superheroes_database/'
 query_path = 'query_images/'
 os.system('clear')
 print '\nCOLOR-BASED IMAGE CLASSIFIER\n'
+print 'Click on any part of the image to continue'
 query_imgs = list([s.replace('.png', '') for s in sorted(os.listdir(query_path))])
+database_imgs = list([s.replace('.png', '') for s in sorted(os.listdir(database_path))])
 
+fig, ax = plt.subplots(3, 9, figsize=(26, 26))
+fig.suptitle('QUERY IMAGES (Ordered Alphabetically)')
+
+order_array = np.arange(0, 27, 1).reshape((3, 9))
+for ii in range(3):
+    for jj in range(9):
+        temp_img = read_img(query_path + query_imgs[order_array[ii, jj]] + '.png')
+        ax[ii, jj].imshow(temp_img)
+        ax[ii, jj].set_xticks([])
+        ax[ii, jj].set_yticks([])
+        ax[ii, jj].set_xlabel(query_imgs[order_array[ii, jj]])
+
+plt.draw()
+plt.waitforbuttonpress()
 
 while True:
     print 'Please choose a query image from the list below: \n'
@@ -50,7 +64,7 @@ while True:
         print 'ERROR: The metric ' + metric + ' is not supported.'
     else:
         break
-        
+
 print '... Initializing classifier'
 classifier = ImageClassifier(color_space, hist_size, database_path, query_path)
 
@@ -59,5 +73,5 @@ if metric == 'all':
         classifier.compare_image(q_img, m)
 else:
     classifier.compare_image(q_img, metric)
-    
+
 plt.show()
