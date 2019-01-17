@@ -1,4 +1,4 @@
-# Quantitative Analysis of Similarity Measures of Distributions
+# Quantitative Analysis of Similarity Measures of Distributions: Image classifier demo
 
 Abstrct:
 The Earth Mover’s Distance (EMD) is a metric based on the theory of optimal transport that has interesting geometrical properties for distributions comparison. However, the use of this measure is limited in comparison with other similarity as the Kullback Leibler divergence. The main reason was, until recently, the computation complexity. In this paper, we present a comparative study of the dissimilarity measures mostused in the literature for the comparison of distributions through a color-based image classification system and other simple examples with synthetic data. We show that today the EMD is a computationally efficient measure that better reflects the similarity between two distributions.
