@@ -124,30 +124,22 @@ class ImageClassifier:
         else:
             order = distances.argsort()
 
-        query_img = read_img(self.query_path + query_img)
-        best_math = read_img(self.database_path + self.classes[order[0]] + '.png')
+        fig2, ax = plt.subplots(3, 9, figsize=(26, 26))
+        fig2.suptitle('COMPARISON RESULT (Ordered by Similarity) \n Metric: ' + metric + ', Hist. size: %i' % self.hist_size + ', Color space: ' + self.color_space)
 
-        fig1, ax = plt.subplots(1, 2, figsize=(8, 4))
-        fig1.suptitle('COMPARISON RESULT \n Metric: ' + metric + ', Hist. size: %i' % self.hist_size + ', Color space: ' + self.color_space)
-        ax[0].imshow(query_img)
-        ax[1].imshow(best_math)
-        ax[0].set_xlabel('Query image')
-        ax[1].set_xlabel('Best match, d = %.2f' % distances[order[0]])
+        order_array = np.arange(0, 27, 1) - 1
+        order_array[0] = 0
+        order_array = order_array.reshape((3, 9))
 
-        for ii in ax:
-            ii.set_xticks([])
-            ii.set_yticks([])
-
-        fig2, ax = plt.subplots(5, 5, figsize=(8, 10))
-        fig2.suptitle('COMPARISON ARRAY \n Metric: ' + metric + ', Hist. size: %i' % self.hist_size + ', Color space: ' + self.color_space)
-
-        order_array = order[1:].reshape((5, 5))
-        for ii in range(5):
-            for jj in range(5):
-                temp_img = read_img(self.database_path + self.classes[order_array[ii, jj]] + '.png')
+        for ii in range(3):
+            for jj in range(9):
+                if ii == 0 and jj == 0:
+                    temp_img = read_img(self.query_path + query_img)
+                    name = 'Query image'
+                else:
+                    temp_img = read_img(self.database_path + self.classes[order_array[ii, jj]] + '.png')
+                    name = 'd = %.2f' % distances[order_array[ii, jj]]
                 ax[ii, jj].imshow(temp_img)
                 ax[ii, jj].set_xticks([])
                 ax[ii, jj].set_yticks([])
-                ax[ii, jj].set_xlabel('d = %.2f' % distances[order_array[ii, jj]])
-
-
+                ax[ii, jj].set_xlabel(name)
