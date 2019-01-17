@@ -67,7 +67,7 @@ The image classfier demo contains two folders, one with the query images (query_
 * wolverine
 * wonderwoman
  
- To run the demo you have to lauch the classifier_demo.py file and it will guide you througth the test. The classifier will ask you for some information:
+ To run the demo you have to lauch the classifier_demo.py file and it will guide you through the test. The classifier will ask you for some information:
  
  1. Query image: You have to choose an image between the classes listed below.
  2. Color space: You have the posibility to choose between 3 color spaces [lab, rgb, hls].
