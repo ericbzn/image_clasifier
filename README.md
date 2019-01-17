@@ -1,22 +1,25 @@
-# Landing Target Detection by Perception
+# Quantitative Analysis of Similarity Measures of Distributions
 
-In this work, we present a novel method for the detection of landing targets for the UAV vision aided landing. We propose to model the landing target by taking into account the principles of the human perception. Our model extracts the landing target contours as outliers using the RX anomaly detector and computing proximity and a similarity measure. Finally, we use the error correction Hamming code to reduce the recognition errors. The methodology presented works in an unsupervised mode, i.e., no need to adjust parameters. 
+Abstrct:
+The Earth Mover’s Distance (EMD) is a metric based on the theory of optimal transport that has interesting geometrical properties for distributions comparison. However, the use of this measure is limited in comparison with other similarity as the Kullback Leibler divergence. The main reason was, until recently, the computation complexity. In this paper, we present a comparative study of the dissimilarity measures mostused in the literature for the comparison of distributions through a color-based image classification system and other simple examples with synthetic data. We show that today the EMD is a computationally efficient measure that better reflects the similarity between two distributions.
 
-You can find the full paper at: https://link.springer.com/chapter/10.1007/978-3-030-01449-0_20
-and look some results of our algorithm at: https://youtu.be/igsQc7VEF2c
+You can find the full paper at: 
+
 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+These instructions will get you a copy of the image classifier used in the article to compare the different similarity measures. The code runs on your local machine for testing and development purposes. 
 
 ### Prerequisites
 
-The presented code was developed in Ubuntu 16.04 using python 2.7 and other external libraries. Therefore, you need to have in your system the following modules:
+The presented code was developed in Ubuntu 18.04 using python 2.7 and other external libraries. Therefore, you need to have in your system the following modules:
 
 * python 2.7
-* python libraries (numpy, SciPy, Sklearn, Pygame, ...)
+* python common libraries (numpy, SciPy, Sklearn, Pygame, matplotlib,...)
 * OpenCv
+* Python Optimal Trasport (POT)
+* Python joblib.Parallel (joblib)
 
 ### Installing pip for Python 2
 
@@ -30,19 +33,55 @@ sudo apt install python-pip
 ```
 3. Install needed packages with pip
 ```console
-sudo -H pip install numpy scipy matplotlib pygame opencv-python scikit-learn spectral Pillow 
+sudo -H pip install numpy scipy matplotlib pygame opencv-python scikit-learn spectral Pillow joblib POT
 ```
 
 ## Running the tests
-The code only has a source file (detection_by_perception.py) and is composed of 20 functions. In the main function, the code brings the option to choose between three options depending on the source from the input images come from. 
+The image classfier demo contains two folders, one with the query images (query_images/) and other  which contains the images with which we are going to compare a query image. The database has 26 different classes (superheroes_database/). The name of the classes are the name of the superheroes; if a name is repeated, the class is the superheroe name plus some characteristic. The classes are:
 
-1. `src_images()` - Take the images for the landing target detection from a repertoire of images 
-2. `src_video()` - Take the images for the landing target detection from a live video coming from a camera 
-3. `src_video_file()` - Take the images for the landing target detection from a video file
+* batman 
+* batman_black
+* batman_white
+* batman_wings
+* boba
+* c3po
+* capt_america
+* flash
+* hawkeye
+* hulk
+* ironman_a
+* ironman_b
+* loki
+* magneto
+* robin
+* spiderman
+* spiderman_black
+* superman
+* superman_dark
+* thor
+* troop
+* troop_black
+* vader
+* vader_silver
+* widow
+* wolverine
+* wonderwoman
+ 
+ To run the demo you have to lauch the classifier_demo.py file and it will guide you througth the test. The classifier will ask you for some information:
+ 
+ 1. Query image: You have to choose an image between the classes listed below.
+ 2. Color space: You have the posibility to choose between 3 color spaces [lab, rgb, hls].
+ 3. Histogram size: You have to choose a histogram size between 2 and 32 bins per color channel. 
+ 4. Metric: You have to choose between the six different similarity measures compared in this work. The possible metrics are: 
+* corr = Histogram correlation
+* inter = Histogram Intersection
+* bhatt = Bhattacharyya Distance
+* chi2 = Chi Square Statistic
+* kl = Kullback-Leibler Divergence
+* emd = Earth Movers Distance
+* all = Test all the metrics
 
-To run a test, try first with the `src_images()`. The images for the test are allocated in *indir\images* and the after the process, the result images sill be save in *outdir\images*. If some of the directories don't exist, the program will send an error.
-
-Also, you may take into account that even if the code could process the landing target detection using the three sources of input images, it may causes errors. When testing, comment/uncomment the respective functions. 
+Once the information is given, the image_classifier.py will create the classifier and will compute the distance between the query image and the images in the database. At the end of the comparation, the classifier shows the more similar image (best match) according with the set up (color space, histogram size and metric) and the rest of the database images orderes in increassing dissimilarity.
 
 ## Contributing
 
