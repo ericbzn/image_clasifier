@@ -124,22 +124,46 @@ class ImageClassifier:
         else:
             order = distances.argsort()
 
-        fig2, ax = plt.subplots(3, 9, figsize=(26, 26))
+        fig2, ax = plt.subplots(4, 9, figsize=(26, 26))
         fig2.suptitle('COMPARISON RESULT (Ordered by Similarity) \n Metric: ' + metric + ', Hist. size: %i' % self.hist_size + ', Color space: ' + self.color_space)
+        plt.setp(ax, xticks=[], xticklabels=[], yticks=[], yticklabels=[])
 
-        order_array = np.arange(0, 27, 1) - 1
-        order_array[0] = 0
-        order_array = order_array.reshape((3, 9))
+        ax[0, 1].imshow(read_img(self.query_path + query_img))
+        ax[0, 1].set_xlabel('Query image')
+
+        ax[0, 4].imshow(read_img(self.database_path + self.classes[order[0]] + '.png'))
+        ax[0, 4].set_xlabel('Best match (%s)' % metric)
+
+        if query_img == 'ironman_a.png' or query_img == 'ironman_b.png':
+            query_img = 'ironman.png'
+
+        ax[0, 7].imshow(read_img(self.database_path + query_img))
+        ax[0, 7].set_xlabel('Ground Truth')
+
+        order_array = np.arange(0, 36, 1) - 9
+        order_array = order_array.reshape((4, 9))
+        # order_array[0, :] = None
+
+        # order_array = np.arange(0, 27, 1).reshape((3, 9))
 
         for ii in range(3):
             for jj in range(9):
-                if ii == 0 and jj == 0:
-                    temp_img = read_img(self.query_path + query_img)
-                    name = 'Query image'
+                if order_array[ii+1, jj] == 26:
+                    ax[ii+1, jj].set_xticks([])
+                    ax[ii+1, jj].set_yticks([])
+                    ax[ii+1, jj].set_xlabel('')
                 else:
-                    temp_img = read_img(self.database_path + self.classes[order_array[ii, jj]] + '.png')
-                    name = 'd = %.2f' % distances[order_array[ii, jj]]
-                ax[ii, jj].imshow(temp_img)
-                ax[ii, jj].set_xticks([])
-                ax[ii, jj].set_yticks([])
-                ax[ii, jj].set_xlabel(name)
+                    temp_img = read_img(self.database_path + self.classes[order[order_array[ii+1, jj]]] + '.png')
+                    name = 'd = %.2f' % distances[order[order_array[ii+1, jj]]]
+                    ax[ii+1, jj].imshow(temp_img)
+                    ax[ii+1, jj].set_xticks([])
+                    ax[ii+1, jj].set_yticks([])
+                    ax[ii+1, jj].set_xlabel(name)
+
+        [ax[0, 0].spines[s].set_visible(False) for s in ax[0, 0].spines]
+        [ax[0, 2].spines[s].set_visible(False) for s in ax[0, 0].spines]
+        [ax[0, 3].spines[s].set_visible(False) for s in ax[0, 0].spines]
+        [ax[0, 5].spines[s].set_visible(False) for s in ax[0, 0].spines]
+        [ax[0, 6].spines[s].set_visible(False) for s in ax[0, 0].spines]
+        [ax[0, 8].spines[s].set_visible(False) for s in ax[0, 0].spines]
+        [ax[3, 8].spines[s].set_visible(False) for s in ax[0, 0].spines]
