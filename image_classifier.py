@@ -83,7 +83,6 @@ class ImageClassifier:
         elif metric == 'emd':
             method = 6
 
-
         if method <= 5:
             hist1 = np.float32(query_hist / query_hist.sum())
             self.distances = np.array(Parallel(n_jobs=num_cores, require='sharedmem')(delayed(bin2bin_hist_comp)(hist1, self.database_hist[ii, :, :, :], method) for ii in range(len(self.classes))))
@@ -142,9 +141,6 @@ class ImageClassifier:
 
         order_array = np.arange(0, 36, 1) - 9
         order_array = order_array.reshape((4, 9))
-        # order_array[0, :] = None
-
-        # order_array = np.arange(0, 27, 1).reshape((3, 9))
 
         for ii in range(3):
             for jj in range(9):
