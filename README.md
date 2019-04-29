@@ -82,9 +82,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Authors
 <!---
-* **Eric Bazán** *<eric.bazan@mines-paristech.fr>* - *Initial work*
-* **Petr Dokládal** *<petr.dokladaln@mines-paristech.fr>*- *Initial work* 
-* **Eva Dokládalová** *<eva.dokladalova@esiee.fr>*- *Initial work* 
+Secret until the double-blinded review pass
 -->
 ## License
 
