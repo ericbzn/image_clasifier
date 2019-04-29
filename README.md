@@ -81,11 +81,11 @@ Once the information is given, the image_classifier.py will create the classifie
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Authors
-
-* **Eric Bazan** *<eric.bazan@mines-paristech.fr>* - *Initial work*
+<!---
+* **Eric Bazán** *<eric.bazan@mines-paristech.fr>* - *Initial work*
 * **Petr Dokládal** *<petr.dokladaln@mines-paristech.fr>*- *Initial work* 
 * **Eva Dokládalová** *<eva.dokladalova@esiee.fr>*- *Initial work* 
-
+-->
 ## License
 
 This project is licensed under the GNU General Public License - see the [LICENSE.md](LICENSE.md) file for details
