@@ -44,16 +44,16 @@ while True:
 #         break
 texture_descriptor = 'gabor'
 while True:
-    n_freq = int(raw_input('\nPlease choose the number of frequencies [between 2 and 32 bins]: '))
-    if n_freq < 2 or n_freq > 32:
+    n_freq = int(raw_input('\nPlease choose the number of frequencies [between 4 and 10 bins]: '))
+    if n_freq < 4 or n_freq > 10:
         os.system('clear')
         print 'ERROR: The histogram size is too small or too big.'
     else:
         break
 
 while True:
-    n_angles = int(raw_input('\nPlease choose the number of rotations [between 2 and 32 bins]: '))
-    if n_angles < 2 or n_angles > 32:
+    n_angles = int(raw_input('\nPlease choose the number of rotations [between 4 and 12 bins]: '))
+    if n_angles < 4 or n_angles > 12:
         os.system('clear')
         print 'ERROR: The histogram size is too small or too big.'
     else:
