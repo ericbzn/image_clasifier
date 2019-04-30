@@ -90,5 +90,5 @@ This project is licensed under the GNU General Public License - see the [LICENSE
 
 ## Acknowledgments
 
-* This research is partially supported by the Mexican National Council for Science and Technology (CONACYT)
+
 
